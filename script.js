@@ -27,7 +27,6 @@ window.fbAsyncInit = function() {
 
       resultsDiv.innerHTML = `
         <p>Code: ${code}</p>
-        <p>WABA ID: ${wabaId}</p>
       `;
 
 
@@ -45,35 +44,35 @@ window.fbAsyncInit = function() {
     });
   }
 
-function startEmbeddedSignup() {
-  FB.ui({
-    method: 'embedded_signup',
-    login_text: 'Log in to continue',
-    new_user_text: 'Create a new Business Account',
-    cancel_text: 'Cancel',
-    // You can add additional options here based on your needs
-    // Refer to Meta documentation for available options
-  }, function(response) {
-    if (response && response.authResponse) {
-      const code = response.authResponse.code;
-      const wabaId = response.authResponse.extraData.waba_id;
-      const accessToken = response.authResponse.accessToken;
+// function startEmbeddedSignup() {
+//   FB.ui({
+//     method: 'embedded_signup',
+//     login_text: 'Log in to continue',
+//     new_user_text: 'Create a new Business Account',
+//     cancel_text: 'Cancel',
+//     // You can add additional options here based on your needs
+//     // Refer to Meta documentation for available options
+//   }, function(response) {
+//     if (response && response.authResponse) {
+//       const code = response.authResponse.code;
+//       const wabaId = response.authResponse.extraData.waba_id;
+//       const accessToken = response.authResponse.accessToken;
 
-      // **Security Note:** NEVER display the access token on the client-side
-      console.log('Code:', code);
-      console.log('WABA ID:', wabaId);
+//       // **Security Note:** NEVER display the access token on the client-side
+//       console.log('Code:', code);
+//       console.log('WABA ID:', wabaId);
 
-      resultsDiv.innerHTML = `
-        <p>Code: ${code}</p>
-      `;
+//       resultsDiv.innerHTML = `
+//         <p>Code: ${code}</p>
+//       `;
 
-      // Exchange the code for a server-side token with limited permissions
-      // Implement server-side logic for secure token exchange
-    } else {
-      console.log('User cancelled signup');
-    }
-  });
-}
+//       // Exchange the code for a server-side token with limited permissions
+//       // Implement server-side logic for secure token exchange
+//     } else {
+//       console.log('User cancelled signup');
+//     }
+//   });
+// }
 
 const sessionInfoListener = (event) => {
     if (event.origin !== "https://www.facebook.com" && event.origin !== "https://web.facebook.com") {
