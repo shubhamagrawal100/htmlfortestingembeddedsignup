@@ -19,12 +19,11 @@ window.fbAsyncInit = function() {
       if (response.authResponse) {
         const accessToken = response.authResponse.accessToken;
         const code = response.authResponse.code;
-        const wabaId = response.authResponse.extraData.waba_id;
         //Use this token to call the debug_token API and get the shared WABA's ID
 
          // **Security Note:** NEVER display the access token on the client-side
       console.log('Code:', code);
-      console.log('WABA ID:', wabaId);
+     
 
       resultsDiv.innerHTML = `
         <p>Code: ${code}</p>
@@ -40,8 +39,8 @@ window.fbAsyncInit = function() {
       response_type: 'code',     // must be set to 'code' for System User access token
       override_default_response_type: true,
       extras: {
-        setup: {
-        }
+        "feature": "whatsapp_embedded_signup",
+        "sessionInfoVersion": 2  //  Receive Session Logging Info
       }
     });
   }
@@ -66,7 +65,6 @@ function startEmbeddedSignup() {
 
       resultsDiv.innerHTML = `
         <p>Code: ${code}</p>
-        <p>WABA ID: ${wabaId}</p>
       `;
 
       // Exchange the code for a server-side token with limited permissions
@@ -76,3 +74,31 @@ function startEmbeddedSignup() {
     }
   });
 }
+
+const sessionInfoListener = (event) => {
+    if (event.origin !== "https://www.facebook.com" && event.origin !== "https://web.facebook.com") {
+      return;
+    }
+    
+    try {
+      const data = JSON.parse(event.data);
+      if (data.type === 'WA_EMBEDDED_SIGNUP') {
+        // if user finishes the Embedded Signup flow
+        if (data.event === 'FINISH') {
+          const {phone_number_id, waba_id} = data.data;
+          console.log(phone_number_id);
+          console.log(waba_id);
+        }
+        // if user cancels the Embedded Signup flow
+        else {
+         const{current_step} = data.data;
+         console.log(current_step);
+        }
+      }
+    } catch {
+      // Don’t parse info that’s not a JSON
+      console.log('Non JSON Response', event.data);
+    }
+  };
+  
+  window.addEventListener('message', sessionInfoListener);  
