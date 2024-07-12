@@ -25,7 +25,7 @@ window.fbAsyncInit = function() {
       console.log('Code:', code);
      
 
-      resultsDiv.innerHTML = `
+      resultsDiv.innerHTML += `
         <p>Code: ${code}</p>
       `;
 
@@ -87,6 +87,11 @@ const sessionInfoListener = (event) => {
           const {phone_number_id, waba_id} = data.data;
           console.log(phone_number_id);
           console.log(waba_id);
+
+          resultsDiv.innerHTML += `
+          <p>Phone number ID : ${phone_number_id}</p>
+          <p>WABA ID : ${waba_id}</p>
+         `;
         }
         // if user cancels the Embedded Signup flow
         else {
